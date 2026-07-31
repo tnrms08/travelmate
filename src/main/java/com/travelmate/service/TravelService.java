@@ -2,35 +2,22 @@ package com.travelmate.service;
 
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
+import com.travelmate.repository.TravelRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor  //생성자 자동 생성
 @Service
 public class TravelService {
+    private final TravelRepository travelRepository;
     public List<TravelResponse> getTravels() {
-        return List.of(
-                new TravelResponse(
-                        1L,
-                        "후쿠오카 여행",
-                        "후쿠오카",
-                        "2026-09-01",
-                        "2026-09-04",
-                        800000
-                ),
-                new TravelResponse(
-                        2L,
-                        "도쿄 여행",
-                        "도쿄",
-                        "2026-10-01",
-                        "2026-10-05",
-                        1200000
-                )
-        );
+        return travelRepository.findAll();
     }
 
     public TravelResponse createTravel(TravelRequest request){
-        return new TravelResponse(
+        TravelResponse travel = new TravelResponse(
                 3L,
                 request.getTitle(),
                 request.getDestination(),
@@ -38,6 +25,7 @@ public class TravelService {
                 request.getEndDate(),
                 request.getBudget()
         );
+        return travelRepository.save(travel);
     }
 
 }
