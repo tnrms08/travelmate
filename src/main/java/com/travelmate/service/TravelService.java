@@ -16,6 +16,10 @@ public class TravelService {
         return travelRepository.findAll();
     }
 
+    public TravelResponse getTravel(Long id) {
+        return travelRepository.findById(id);
+    }
+
     public TravelResponse createTravel(TravelRequest request){
         TravelResponse travel = new TravelResponse(
                 3L,
@@ -26,6 +30,13 @@ public class TravelService {
                 request.getBudget()
         );
         return travelRepository.save(travel);
+    }
+    public void deleteTravel(Long id){
+        travelRepository.deleteById(id);
+    }
+
+    public TravelResponse updateTravel(Long id, TravelRequest request){
+        return travelRepository.update(id, request);
     }
 
 }

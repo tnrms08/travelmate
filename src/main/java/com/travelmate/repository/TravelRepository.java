@@ -1,5 +1,6 @@
 package com.travelmate.repository;
 
+import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import org.springframework.stereotype.Repository;
 
@@ -39,5 +40,45 @@ public class TravelRepository {
     public TravelResponse save(TravelResponse travel){
         travels.add(travel);
         return travel;
+    }
+
+    public TravelResponse findById(Long id) {
+//        for(int i = 0; i< travels.size();i++){
+//            if(travels.get(i).getId().equals(id)) return travels.get(i);
+//        }
+        for (TravelResponse travel : travels) {
+            if (travel.getId().equals(id)) {
+                return travel;
+            }
+        }
+        return null;
+    }
+
+    public void deleteById(Long id){
+        for(int i=0;i< travels.size();i++){
+            if(travels.get(i).getId().equals(id)) {
+                travels.remove(i);
+                return;
+            }
+        }
+    }
+    public TravelResponse update(Long id, TravelRequest request){
+        TravelResponse updatedTravel = new TravelResponse(
+                id,
+                request.getTitle(),
+                request.getDestination(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getBudget()
+        );
+
+        for(int i=0;i< travels.size();i++){
+            if(travels.get(i).getId().equals(id)) {
+                travels.set(i, updatedTravel);
+
+                return updatedTravel;
+            }
+        }
+        return null;
     }
 }
