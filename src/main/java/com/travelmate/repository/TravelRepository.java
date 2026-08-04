@@ -2,6 +2,7 @@ package com.travelmate.repository;
 
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
+import com.travelmate.exception.TravelNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -43,15 +44,12 @@ public class TravelRepository {
     }
 
     public TravelResponse findById(Long id) {
-//        for(int i = 0; i< travels.size();i++){
-//            if(travels.get(i).getId().equals(id)) return travels.get(i);
-//        }
         for (TravelResponse travel : travels) {
             if (travel.getId().equals(id)) {
                 return travel;
             }
         }
-        return null;
+        throw new TravelNotFoundException();
     }
 
     public void deleteById(Long id){
@@ -61,6 +59,7 @@ public class TravelRepository {
                 return;
             }
         }
+        throw new TravelNotFoundException();
     }
     public TravelResponse update(Long id, TravelRequest request){
         TravelResponse updatedTravel = new TravelResponse(
@@ -72,13 +71,13 @@ public class TravelRepository {
                 request.getBudget()
         );
 
-        for(int i=0;i< travels.size();i++){
-            if(travels.get(i).getId().equals(id)) {
+        for(int i=0;i< travels.size();i++) {
+            if (travels.get(i).getId().equals(id)) {
                 travels.set(i, updatedTravel);
 
                 return updatedTravel;
             }
         }
-        return null;
+        throw new TravelNotFoundException();
     }
 }
