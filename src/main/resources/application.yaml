@@ -1,3 +1,18 @@
 spring:
   application:
     name: travelmate
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/travelmate
+    username: postgres
+    password: 010810
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true

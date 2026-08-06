@@ -2,6 +2,7 @@ package com.travelmate.hello;
 
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
+import com.travelmate.entity.Travel;
 import com.travelmate.service.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
