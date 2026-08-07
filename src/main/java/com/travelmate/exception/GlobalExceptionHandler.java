@@ -19,4 +19,18 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
     }
+    @ExceptionHandler(DuplicateLoginIdException.class)
+    public ResponseEntity<ErrorResponse> handleDublicateLoginException(DuplicateLoginIdException e){
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse(e.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+    @ExceptionHandler(LoginFailedException.class)
+    public ResponseEntity<ErrorResponse> handleLoginFailedException(LoginFailedException e){
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse(e.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
 }

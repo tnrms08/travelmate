@@ -1,8 +1,7 @@
-package com.travelmate.hello;
+package com.travelmate.controller;
 
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
-import com.travelmate.entity.Travel;
 import com.travelmate.service.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +12,12 @@ import java.util.List;
 @RestController
 public class HelloController {
 
+    private final TravelService travelService;
 
     @GetMapping("/hello")
     public String hello() {
         return " Hello TravelMate!!";
     }
-
-    private final TravelService travelService;
 
     @GetMapping("/travels")
     public List<TravelResponse> travels(){
