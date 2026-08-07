@@ -4,7 +4,6 @@ import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import com.travelmate.entity.Travel;
 import com.travelmate.exception.TravelNotFoundException;
-import com.travelmate.repository.MemoryTravelRepository;
 import com.travelmate.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,37 +17,37 @@ import java.util.Optional;
 @Service
 public class TravelService {
     private final TravelRepository travelRepository;
+
+    //Travel to TravelResponse
+    private TravelResponse toResponse(Travel travel){
+        return new TravelResponse(
+                travel.getId(),
+                travel.getTitle(),
+                travel.getDestination(),
+                travel.getStartDate().toString(),
+                travel.getEndDate().toString(),
+                travel.getBudget()
+        );
+    }
+
+    //Trvel 객체가 있는지 확인
+    private Travel findTravelById(Long id){
+        return travelRepository.findById(id).orElseThrow(TravelNotFoundException::new);
+    }
+
     public List<TravelResponse> getTravels() {
         List<Travel> travels = travelRepository.findAll();
 
         List<TravelResponse> foundTravels = new ArrayList<>();
         for(Travel travel: travels){
-            foundTravels.add(
-                    new TravelResponse(
-                            travel.getId(),
-                            travel.getTitle(),
-                            travel.getDestination(),
-                            travel.getStartDate().toString(),
-                            travel.getEndDate().toString(),
-                            travel.getBudget()));
+            foundTravels.add(toResponse(travel));
         }
         return foundTravels;
     }
 
     public TravelResponse getTravel(Long id) {
-        Optional<Travel> travel = travelRepository.findById(id);
-
-        if(travel.isPresent()){
-            return new TravelResponse(
-                    travel.get().getId(),
-                    travel.get().getTitle(),
-                    travel.get().getDestination(),
-                    travel.get().getStartDate().toString(),
-                    travel.get().getEndDate().toString(),
-                    travel.get().getBudget()
-            );
-        }
-        throw new TravelNotFoundException();
+        Travel travel = findTravelById(id);
+        return toResponse(travel);
     }
 
     public TravelResponse createTravel(TravelRequest request){
@@ -60,28 +59,17 @@ public class TravelService {
                 request.getBudget()
         );
         Travel savedTravel = travelRepository.save(travel);
-        return new TravelResponse(
-                savedTravel.getId(),
-                savedTravel.getTitle(),
-                savedTravel.getDestination(),
-                savedTravel.getStartDate().toString(),
-                savedTravel.getEndDate().toString(),
-                savedTravel.getBudget()
-        );
+        return toResponse(savedTravel);
     }
     public void deleteTravel(Long id){
-        Optional<Travel> travel = travelRepository.findById(id);
-        if(!travel.isPresent()) throw new TravelNotFoundException();
+        findTravelById(id);
         travelRepository.deleteById(id);
+//        Travel travel = findTravelById(id);
+//        travelRepository.delete(travel);
     }
 
     public TravelResponse updateTravel(Long id, TravelRequest request){
-        Optional<Travel> travel = travelRepository.findById(id);
-
-        if(!travel.isPresent()){
-            throw new TravelNotFoundException();
-        }
-        Travel foundTravel = travel.get();
+        Travel foundTravel = findTravelById(id);
 
         foundTravel.setTitle(request.getTitle());
         foundTravel.setDestination(request.getDestination());
@@ -91,14 +79,7 @@ public class TravelService {
 
         Travel savedTravel = travelRepository.save(foundTravel);
 
-        return new TravelResponse(
-                savedTravel.getId(),
-                savedTravel.getTitle(),
-                savedTravel.getDestination(),
-                savedTravel.getStartDate().toString(),
-                savedTravel.getEndDate().toString(),
-                savedTravel.getBudget()
-        );
+        return toResponse(savedTravel);
     }
 
 }
