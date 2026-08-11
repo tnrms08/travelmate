@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TravelRequest {
+    private String loginId;
     private String title;
     private String destination;
     private String startDate;

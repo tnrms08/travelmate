@@ -1,9 +1,6 @@
 package com.travelmate.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,13 +22,18 @@ public class Travel {
     private LocalDate endDate;
     private Integer budget;
 
+    @ManyToOne
+    private User user;
+
     public Travel(
+            User user,
             String title,
             String destination,
             LocalDate startDate,
             LocalDate endDate,
             Integer budget
     ){
+        this.user=user;
         this.title=title;
         this.destination=destination;
         this.startDate=startDate;

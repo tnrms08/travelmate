@@ -3,8 +3,12 @@ package com.travelmate.service;
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import com.travelmate.entity.Travel;
+import com.travelmate.entity.User;
+import com.travelmate.exception.TravelAccessDeniedException;
 import com.travelmate.exception.TravelNotFoundException;
+import com.travelmate.exception.UserNotFoundException;
 import com.travelmate.repository.TravelRepository;
+import com.travelmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,7 @@ import java.util.List;
 @Service
 public class TravelService {
     private final TravelRepository travelRepository;
+    private final UserRepository userRepository;
 
     //Travel to TravelResponse
     private TravelResponse toResponse(Travel travel){
@@ -49,8 +54,23 @@ public class TravelService {
         return toResponse(travel);
     }
 
+    public List<TravelResponse> getTravelsByUser(String loginId){
+        User user = userRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
+        List<Travel> travels = travelRepository.findByUser(user);
+
+        List<TravelResponse> foundTravels = new ArrayList<>();
+        for(Travel travel: travels){
+            foundTravels.add(toResponse(travel));
+        }
+        return foundTravels;
+    }
+
     public TravelResponse createTravel(TravelRequest request){
+        User user = userRepository
+                .findByLoginId(request.getLoginId())
+                .orElseThrow(UserNotFoundException::new);
         Travel travel = new Travel(
+                user,
                 request.getTitle(),
                 request.getDestination(),
                 LocalDate.parse(request.getStartDate()),
@@ -60,25 +80,35 @@ public class TravelService {
         Travel savedTravel = travelRepository.save(travel);
         return toResponse(savedTravel);
     }
-    public void deleteTravel(Long id){
-        findTravelById(id);
-        travelRepository.deleteById(id);
-//        Travel travel = findTravelById(id);
-//        travelRepository.delete(travel);
-    }
 
     public TravelResponse updateTravel(Long id, TravelRequest request){
         Travel foundTravel = findTravelById(id);
+        User user = userRepository
+                .findByLoginId(request.getLoginId())
+                .orElseThrow(UserNotFoundException::new);
+        if(!foundTravel.getUser().equals(user)){
+            throw new TravelAccessDeniedException();
+        }
 
         foundTravel.setTitle(request.getTitle());
         foundTravel.setDestination(request.getDestination());
         foundTravel.setStartDate(LocalDate.parse(request.getStartDate()));
         foundTravel.setEndDate(LocalDate.parse(request.getEndDate()));
         foundTravel.setBudget(request.getBudget());
-
         Travel savedTravel = travelRepository.save(foundTravel);
-
         return toResponse(savedTravel);
+    }
+
+    public void deleteTravel(Long id, String loginId){
+        User user = userRepository
+                .findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
+        Travel foundTravel = findTravelById(id);
+
+        if(!foundTravel.getUser().equals(user)){
+            throw new TravelAccessDeniedException();
+        }
+        travelRepository.deleteById(id);
     }
 
 }

@@ -33,4 +33,20 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e){
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse(e.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(TravelAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleTravelAccessDeniedException(TravelAccessDeniedException e){
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse(e.getMessage()),
+                HttpStatus.FORBIDDEN
+        );
+    }
 }

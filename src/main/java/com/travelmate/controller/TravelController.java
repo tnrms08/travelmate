@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class HelloController {
+public class TravelController {
 
     private final TravelService travelService;
 
@@ -19,14 +19,19 @@ public class HelloController {
         return " Hello TravelMate!!";
     }
 
-    @GetMapping("/travels")
-    public List<TravelResponse> travels(){
-        return travelService.getTravels();
-    }
+//    @GetMapping("/travels")
+//    public List<TravelResponse> travels(){
+//        return travelService.getTravels();
+//    }
 
-    @GetMapping("travels/{id}")
+    @GetMapping("/travels/{id}")
     public TravelResponse getTravel(@PathVariable Long id){
         return travelService.getTravel(id);
+    }
+
+    @GetMapping("/travels")
+    public List<TravelResponse> getTravelsByUser(@RequestParam String loginId){
+        return travelService.getTravelsByUser(loginId);
     }
 
     @PostMapping("/travels")
@@ -34,8 +39,9 @@ public class HelloController {
         return travelService.createTravel(request);
     }
     @DeleteMapping("/travels/{id}")
-    public void deleteTravel(@PathVariable Long id){
-        travelService.deleteTravel(id);
+    public void deleteTravel(@PathVariable Long id,
+                             @RequestParam String loginId){
+        travelService.deleteTravel(id, loginId);
     }
     @PutMapping("/travels/{id}")
     public TravelResponse updateTravel(@PathVariable Long id, @RequestBody TravelRequest request){
