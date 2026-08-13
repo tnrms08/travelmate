@@ -49,8 +49,11 @@ public class TravelService {
         return foundTravels;
     }
 
-    public TravelResponse getTravel(Long id) {
+    public TravelResponse getTravel(String loginId, Long id) {
         Travel travel = findTravelById(id);
+        User user = userRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
+        if(!travel.getUser().equals(user))
+            throw new TravelAccessDeniedException();
         return toResponse(travel);
     }
 
@@ -65,9 +68,9 @@ public class TravelService {
         return foundTravels;
     }
 
-    public TravelResponse createTravel(TravelRequest request){
+    public TravelResponse createTravel(String loginId, TravelRequest request){
         User user = userRepository
-                .findByLoginId(request.getLoginId())
+                .findByLoginId(loginId)
                 .orElseThrow(UserNotFoundException::new);
         Travel travel = new Travel(
                 user,
@@ -81,10 +84,10 @@ public class TravelService {
         return toResponse(savedTravel);
     }
 
-    public TravelResponse updateTravel(Long id, TravelRequest request){
+    public TravelResponse updateTravel(Long id, String loginId, TravelRequest request){
         Travel foundTravel = findTravelById(id);
         User user = userRepository
-                .findByLoginId(request.getLoginId())
+                .findByLoginId(loginId)
                 .orElseThrow(UserNotFoundException::new);
         if(!foundTravel.getUser().equals(user)){
             throw new TravelAccessDeniedException();

@@ -1,6 +1,7 @@
 package com.travelmate.controller;
 
 import com.travelmate.dto.LoginRequest;
+import com.travelmate.dto.LoginResponse;
 import com.travelmate.dto.UserResponse;
 import com.travelmate.dto.UserSignupRequest;
 import com.travelmate.entity.User;
@@ -21,7 +22,7 @@ public class UserController {
         return userService.signup(request);
     }
     @PostMapping("/users/login")    //로그인
-    public UserResponse login(@RequestBody LoginRequest request){
+    public LoginResponse login(@RequestBody LoginRequest request){
         return userService.login(request);
     }
 

@@ -4,6 +4,7 @@ import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import com.travelmate.service.TravelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,38 +15,33 @@ public class TravelController {
 
     private final TravelService travelService;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return " Hello TravelMate!!";
-    }
-
-//    @GetMapping("/travels")
-//    public List<TravelResponse> travels(){
-//        return travelService.getTravels();
-//    }
-
     @GetMapping("/travels/{id}")
-    public TravelResponse getTravel(@PathVariable Long id){
-        return travelService.getTravel(id);
+    public TravelResponse getTravel(Authentication authentication,
+                                    @PathVariable Long id){
+        return travelService.getTravel(authentication.getName(), id);
     }
 
     @GetMapping("/travels")
-    public List<TravelResponse> getTravelsByUser(@RequestParam String loginId){
-        return travelService.getTravelsByUser(loginId);
+    public List<TravelResponse> getTravelsByUser(Authentication authentication){
+        return travelService.getTravelsByUser(authentication.getName());
     }
 
     @PostMapping("/travels")
-    public TravelResponse createTravel(@RequestBody TravelRequest request){
-        return travelService.createTravel(request);
+    public TravelResponse createTravel(Authentication authentication,
+                                       @RequestBody TravelRequest request){
+        return travelService.createTravel(authentication.getName(), request);
     }
+
     @DeleteMapping("/travels/{id}")
-    public void deleteTravel(@PathVariable Long id,
-                             @RequestParam String loginId){
-        travelService.deleteTravel(id, loginId);
+    public void deleteTravel(Authentication authentication, @PathVariable Long id){
+        travelService.deleteTravel(id, authentication.getName());
     }
+
     @PutMapping("/travels/{id}")
-    public TravelResponse updateTravel(@PathVariable Long id, @RequestBody TravelRequest request){
-        return travelService.updateTravel(id,request);
+    public TravelResponse updateTravel(Authentication authentication,
+                                       @PathVariable Long id,
+                                       @RequestBody TravelRequest request){
+        return travelService.updateTravel(id, authentication.getName(), request);
     }
 
 
