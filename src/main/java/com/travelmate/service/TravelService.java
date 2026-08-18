@@ -36,7 +36,9 @@ public class TravelService {
 
     //Trvel 객체가 있는지 확인
     private Travel findTravelById(Long id){
-        return travelRepository.findById(id).orElseThrow(TravelNotFoundException::new);
+        return travelRepository
+                .findById(id)
+                .orElseThrow(TravelNotFoundException::new);
     }
 
     public List<TravelResponse> getTravels() {
@@ -51,7 +53,9 @@ public class TravelService {
 
     public TravelResponse getTravel(String loginId, Long id) {
         Travel travel = findTravelById(id);
-        User user = userRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository
+                .findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
         if(!travel.getUser().equals(user))
             throw new TravelAccessDeniedException();
         return toResponse(travel);

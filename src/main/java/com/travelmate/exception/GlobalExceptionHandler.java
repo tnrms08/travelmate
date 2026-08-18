@@ -49,4 +49,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.FORBIDDEN
         );
     }
+
+    @ExceptionHandler(ScheduleNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleScheduleNotFoundException(ScheduleNotFoundException e){
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse(e.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
 }
