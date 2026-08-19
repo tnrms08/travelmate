@@ -47,17 +47,6 @@ public class ScheduleService {
                 .orElseThrow(ScheduleNotFoundException::new);
     }
 
-    public ScheduleResponse getSchedule(String loginId, Long id){
-        Schedule schedule = findScheduleById(id);
-        User user = userRepository
-                .findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
-
-        if(!schedule.getTravel().getUser().equals(user))
-            throw new TravelAccessDeniedException();
-        return toResponse(schedule);
-    }
-
     public List<ScheduleResponse> getSchedulesByTravel(String loginId, Long travelId){
         Travel travel = travelRepository
                 .findById(travelId)
@@ -77,6 +66,27 @@ public class ScheduleService {
             foundSchedules.add(toResponse(schedule));
         }
         return foundSchedules;
+    }
+
+    public ScheduleResponse getScheduleById(String loginId, Long travelId, Long scheduleId) {
+        Schedule schedule=findScheduleById(scheduleId);
+
+        Travel travel = travelRepository
+                .findById(travelId)
+                .orElseThrow(TravelNotFoundException::new);
+
+        User user = userRepository
+                .findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
+
+        if(!travel.getUser().equals(user))
+            throw new TravelAccessDeniedException();
+
+        if(!schedule.getTravel().equals(travel)){
+            throw new TravelAccessDeniedException();
+        }
+
+        return toResponse(schedule);
     }
 
     public ScheduleResponse createSchedule(String loginId, Long travelId, ScheduleRequest request){
@@ -105,4 +115,63 @@ public class ScheduleService {
 
         return toResponse(savedSchedule);
     }
+
+    public ScheduleResponse updateSchedule(String loginId,
+                                           Long travelId,
+                                           Long id,
+                                           ScheduleRequest request){
+
+        Schedule foundSchedule = findScheduleById(id);
+
+        Travel travel = travelRepository
+                .findById(travelId)
+                .orElseThrow(TravelNotFoundException::new);
+
+        User user = userRepository
+                .findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
+
+        if(!travel.getUser().equals(user))
+            throw new TravelAccessDeniedException();
+
+        if(!foundSchedule.getTravel().equals(travel)){
+            throw new TravelAccessDeniedException();
+        }
+
+        foundSchedule.setTitle(request.getTitle());
+        foundSchedule.setStartTime(LocalDateTime.parse(request.getStartTime()));
+        foundSchedule.setEndTime(LocalDateTime.parse(request.getEndTime()));
+        foundSchedule.setTransportation(request.getTransportation());
+        foundSchedule.setPlace(request.getPlace());
+        foundSchedule.setMeal(request.getMeal());
+        foundSchedule.setAccommodation(request.getAccommodation());
+
+        Schedule savedSchedule = scheduleRepository.save(foundSchedule);
+
+        return toResponse(savedSchedule);
+    }
+
+    public void deleteSchedule(String loginId, Long travelId, Long id){
+
+        Schedule foundSchedule = findScheduleById(id);
+
+        Travel travel = travelRepository
+                .findById(travelId)
+                .orElseThrow(TravelNotFoundException::new);
+
+        User user = userRepository
+                .findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
+
+        if(!travel.getUser().equals(user))
+            throw new TravelAccessDeniedException();
+
+        if(!foundSchedule.getTravel().equals(travel)){
+            throw new TravelAccessDeniedException();
+        }
+
+        scheduleRepository.delete(foundSchedule);
+    }
+
+
 }

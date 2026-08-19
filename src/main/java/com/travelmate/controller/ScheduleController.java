@@ -20,10 +20,33 @@ public class ScheduleController {
         return scheduleService.getSchedulesByTravel(authentication.getName(), travelId);
     }
 
-    @PostMapping("travels/{travelId}/schedules")
+    @GetMapping("/travels/{travelId}/schedules/{scheduleId}")
+    public ScheduleResponse getSchedulesById(Authentication authentication,
+                                             @PathVariable Long travelId,
+                                             @PathVariable Long scheduleId){
+        return scheduleService.getScheduleById(authentication.getName(), travelId, scheduleId);
+    }
+
+    @PostMapping("/travels/{travelId}/schedules")
     public ScheduleResponse createSchedule(Authentication authentication,
                                            @PathVariable Long travelId,
                                            @RequestBody ScheduleRequest request){
         return scheduleService.createSchedule(authentication.getName(), travelId, request);   
+    }
+
+    @PutMapping("/travels/{travelId}/schedules/{scheduleId}")
+    public ScheduleResponse updateSchedule(Authentication authentication,
+                                           @PathVariable Long travelId,
+                                           @PathVariable Long scheduleId,
+                                           @RequestBody ScheduleRequest request){
+        return scheduleService.updateSchedule(authentication.getName(), travelId, scheduleId, request);
+    }
+
+    @DeleteMapping("/travels/{travelId}/schedules/{scheduleId}")
+    public void deleteSchedule(Authentication authentication,
+                               @PathVariable Long travelId,
+                               @PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(authentication.getName(), travelId, scheduleId);
+
     }
 }
