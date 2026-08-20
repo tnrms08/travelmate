@@ -15,7 +15,6 @@ import com.travelmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +77,8 @@ public class ScheduleService {
         User user = findUser(loginId);
         validateTravelOwner(travel, user);
 
-        List<Schedule> schedules = scheduleRepository.findByTravel(travel);
+        List<Schedule> schedules =
+                scheduleRepository.findByTravelOrderByStartTimeAsc(travel);
 
         List<ScheduleResponse> foundSchedules = new ArrayList<>();
         for(Schedule schedule: schedules){

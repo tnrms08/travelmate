@@ -12,7 +12,6 @@ import com.travelmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +62,8 @@ public class TravelService {
 
     public List<TravelResponse> getTravelsByUser(String loginId){
         User user = findUser(loginId);
-        List<Travel> travels = travelRepository.findByUser(user);
+        List<Travel> travels =
+                travelRepository.findByUserOrderByStartDateAsc(user);
 
         List<TravelResponse> foundTravels = new ArrayList<>();
         for(Travel travel: travels){
