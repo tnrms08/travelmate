@@ -40,6 +40,9 @@ dependencies {
 
     //Spring Security 웹 기능 추가
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //validation 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {

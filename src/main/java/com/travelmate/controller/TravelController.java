@@ -3,6 +3,7 @@ package com.travelmate.controller;
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import com.travelmate.service.TravelService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class TravelController {
 
     @PostMapping("/travels")
     public TravelResponse createTravel(Authentication authentication,
-                                       @RequestBody TravelRequest request){
+                                       @Valid @RequestBody TravelRequest request){
         return travelService.createTravel(authentication.getName(), request);
     }
 
@@ -40,7 +41,7 @@ public class TravelController {
     @PutMapping("/travels/{id}")
     public TravelResponse updateTravel(Authentication authentication,
                                        @PathVariable Long id,
-                                       @RequestBody TravelRequest request){
+                                       @Valid @RequestBody TravelRequest request){
         return travelService.updateTravel(id, authentication.getName(), request);
     }
 

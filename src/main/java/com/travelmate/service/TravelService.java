@@ -28,8 +28,8 @@ public class TravelService {
                 travel.getId(),
                 travel.getTitle(),
                 travel.getDestination(),
-                travel.getStartDate().toString(),
-                travel.getEndDate().toString(),
+                travel.getStartDate(),
+                travel.getEndDate(),
                 travel.getBudget()
         );
     }
@@ -41,28 +41,28 @@ public class TravelService {
                 .orElseThrow(TravelNotFoundException::new);
     }
 
-    public List<TravelResponse> getTravels() {
-        List<Travel> travels = travelRepository.findAll();
+    //User 검증
+    private User findUser(String loginId){
+        return userRepository
+                .findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
+    }
 
-        List<TravelResponse> foundTravels = new ArrayList<>();
-        for(Travel travel: travels){
-            foundTravels.add(toResponse(travel));
-        }
-        return foundTravels;
+    //Travel 소유권 검즘
+    private void validateTravelOwner(Travel travel, User user){
+        if(!travel.getUser().equals(user))
+            throw new TravelAccessDeniedException();
     }
 
     public TravelResponse getTravel(String loginId, Long id) {
         Travel travel = findTravelById(id);
-        User user = userRepository
-                .findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
-        if(!travel.getUser().equals(user))
-            throw new TravelAccessDeniedException();
+        User user = findUser(loginId);
+        validateTravelOwner(travel, user);
         return toResponse(travel);
     }
 
     public List<TravelResponse> getTravelsByUser(String loginId){
-        User user = userRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
+        User user = findUser(loginId);
         List<Travel> travels = travelRepository.findByUser(user);
 
         List<TravelResponse> foundTravels = new ArrayList<>();
@@ -73,15 +73,13 @@ public class TravelService {
     }
 
     public TravelResponse createTravel(String loginId, TravelRequest request){
-        User user = userRepository
-                .findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
+        User user = findUser(loginId);
         Travel travel = new Travel(
                 user,
                 request.getTitle(),
                 request.getDestination(),
-                LocalDate.parse(request.getStartDate()),
-                LocalDate.parse(request.getEndDate()),
+                request.getStartDate(),
+                request.getEndDate(),
                 request.getBudget()
         );
         Travel savedTravel = travelRepository.save(travel);
@@ -90,31 +88,22 @@ public class TravelService {
 
     public TravelResponse updateTravel(Long id, String loginId, TravelRequest request){
         Travel foundTravel = findTravelById(id);
-        User user = userRepository
-                .findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
-        if(!foundTravel.getUser().equals(user)){
-            throw new TravelAccessDeniedException();
-        }
+        User user = findUser(loginId);
+        validateTravelOwner(foundTravel, user);
 
         foundTravel.setTitle(request.getTitle());
         foundTravel.setDestination(request.getDestination());
-        foundTravel.setStartDate(LocalDate.parse(request.getStartDate()));
-        foundTravel.setEndDate(LocalDate.parse(request.getEndDate()));
+        foundTravel.setStartDate(request.getStartDate());
+        foundTravel.setEndDate(request.getEndDate());
         foundTravel.setBudget(request.getBudget());
         Travel savedTravel = travelRepository.save(foundTravel);
         return toResponse(savedTravel);
     }
 
     public void deleteTravel(Long id, String loginId){
-        User user = userRepository
-                .findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
         Travel foundTravel = findTravelById(id);
-
-        if(!foundTravel.getUser().equals(user)){
-            throw new TravelAccessDeniedException();
-        }
+        User user = findUser(loginId);
+        validateTravelOwner(foundTravel, user);
         travelRepository.deleteById(id);
     }
 

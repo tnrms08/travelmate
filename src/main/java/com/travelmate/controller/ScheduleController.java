@@ -3,6 +3,7 @@ package com.travelmate.controller;
 import com.travelmate.dto.ScheduleRequest;
 import com.travelmate.dto.ScheduleResponse;
 import com.travelmate.service.ScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class ScheduleController {
     @PostMapping("/travels/{travelId}/schedules")
     public ScheduleResponse createSchedule(Authentication authentication,
                                            @PathVariable Long travelId,
-                                           @RequestBody ScheduleRequest request){
+                                           @Valid @RequestBody ScheduleRequest request){
         return scheduleService.createSchedule(authentication.getName(), travelId, request);   
     }
 
@@ -38,7 +39,7 @@ public class ScheduleController {
     public ScheduleResponse updateSchedule(Authentication authentication,
                                            @PathVariable Long travelId,
                                            @PathVariable Long scheduleId,
-                                           @RequestBody ScheduleRequest request){
+                                           @Valid @RequestBody ScheduleRequest request){
         return scheduleService.updateSchedule(authentication.getName(), travelId, scheduleId, request);
     }
 

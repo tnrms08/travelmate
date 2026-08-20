@@ -31,8 +31,8 @@ public class ScheduleService {
                 schedule.getId(),
                 schedule.getTravel().getId(),
                 schedule.getTitle(),
-                schedule.getStartTime().toString(),
-                schedule.getEndTime().toString(),
+                schedule.getStartTime(),
+                schedule.getEndTime(),
                 schedule.getTransportation(),
                 schedule.getPlace(),
                 schedule.getMeal(),
@@ -106,8 +106,8 @@ public class ScheduleService {
         Schedule schedule = new Schedule(
                 travel,
                 request.getTitle(),
-                LocalDateTime.parse(request.getStartTime()),
-                LocalDateTime.parse(request.getEndTime()),
+                request.getStartTime(),
+                request.getEndTime(),
                 request.getTransportation(),
                 request.getPlace(),
                 request.getMeal(),
@@ -131,8 +131,8 @@ public class ScheduleService {
         validateScheduleOwner(foundSchedule, travel);
 
         foundSchedule.setTitle(request.getTitle());
-        foundSchedule.setStartTime(LocalDateTime.parse(request.getStartTime()));
-        foundSchedule.setEndTime(LocalDateTime.parse(request.getEndTime()));
+        foundSchedule.setStartTime(request.getStartTime());
+        foundSchedule.setEndTime(request.getEndTime());
         foundSchedule.setTransportation(request.getTransportation());
         foundSchedule.setPlace(request.getPlace());
         foundSchedule.setMeal(request.getMeal());
