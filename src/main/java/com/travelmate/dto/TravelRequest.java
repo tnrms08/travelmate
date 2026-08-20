@@ -15,25 +15,25 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class TravelRequest {
 
-    @AssertTrue
+    @AssertTrue(message = "여행 종료일은 시작일보다 빠를 수 없습니다.")
     public boolean isValidDateRange() {
         return startDate == null
                 || endDate == null
                 || !startDate.isAfter(endDate);
     }
 
-    @NotBlank
+    @NotBlank(message="여행명은 필수입니다.")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "여행지는 필수입니다.")
     private String destination;
 
-    @NotNull
+    @NotNull(message = "여행 시작일은 필수입니다.")
     private LocalDate startDate;
 
-    @NotNull
+    @NotNull(message = "여행 종료일은 필수입니다.")
     private LocalDate endDate;
 
-    @Min(0)
+    @Min(value = 0, message = "예산은 0 이상이어야 합니다.")
     private Integer budget;
 }

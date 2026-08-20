@@ -14,31 +14,28 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ScheduleRequest {
 
-    @AssertTrue
+    @AssertTrue(message = "일정 종료시간은 시작시간보다 늦어야 합니다.")
     public boolean isValidTimeRange(){
         return startTime == null
                 || endTime == null
                 || startTime.isBefore(endTime);
     }
 
-    @NotBlank
+    @NotBlank(message = "일정명은 필수입니다.")
     private String title;
 
-    @NotNull
+    @NotNull(message = "시작 시간은 필수입니다.")
     private LocalDateTime startTime;
 
-    @NotNull
+    @NotNull(message = "종료 시간은 필수입니다.")
     private LocalDateTime endTime;
 
-    @NotBlank
+    @NotBlank(message = "이동 수단은 필수입니다.")
     private String transportation;
 
-    @NotBlank
+    @NotBlank(message = "장소는 필수입니다.")
     private String place;
 
-    @NotBlank
     private String meal;
-
-    @NotBlank
     private String accommodation;
 }

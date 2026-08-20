@@ -4,6 +4,7 @@ package com.travelmate.exception;
 import com.travelmate.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -55,6 +56,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ErrorResponse>(
                 new ErrorResponse(e.getMessage()),
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException e){
+        String message = e.getBindingResult()
+                .getFieldError()
+                .getDefaultMessage();
+
+        return new ResponseEntity<>(
+                new ErrorResponse(message),
+                HttpStatus.BAD_REQUEST
         );
     }
 
