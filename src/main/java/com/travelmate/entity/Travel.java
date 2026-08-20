@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -24,6 +26,10 @@ public class Travel {
 
     @ManyToOne
     private User user;
+
+    //Schedule Entity의 "travel"필드 기준으로 연결
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
+    private List<Schedule> schedules = new ArrayList<>();
 
     public Travel(
             User user,
