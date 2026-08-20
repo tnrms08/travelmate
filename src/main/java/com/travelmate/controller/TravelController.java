@@ -22,8 +22,16 @@ public class TravelController {
         return travelService.getTravel(authentication.getName(), id);
     }
 
+//    @GetMapping("/travels")
+//    public List<TravelResponse> getTravelsByUser(Authentication authentication){
+//        return travelService.getTravelsByUser(authentication.getName());
+//    }
+
     @GetMapping("/travels")
-    public List<TravelResponse> getTravelsByUser(Authentication authentication){
+    public List<TravelResponse> getTravels(Authentication authentication,
+                                           @RequestParam(required = false) String sort){
+        if("status".equals(sort))
+            return travelService.getTravelsByStatus(authentication.getName());
         return travelService.getTravelsByUser(authentication.getName());
     }
 

@@ -89,6 +89,25 @@ public class TravelService {
         return foundTravels;
     }
 
+    public List<TravelResponse> getTravelsByStatus(String loginId){
+        User user = findUser(loginId);
+        List<Travel> travels =
+                travelRepository.findByUserOrderByStartDateAsc(user);
+
+        //Status값에 따른 정렬
+        travels.sort((travel1, travel2)->
+                Integer.compare(
+                        calculateStatus(travel1).getOrder(),
+                        calculateStatus(travel2).getOrder()
+                ));
+
+        List<TravelResponse> foundTravels = new ArrayList<>();
+        for(Travel travel: travels){
+            foundTravels.add(toResponse(travel));
+        }
+        return foundTravels;
+    }
+
     public TravelResponse createTravel(String loginId, TravelRequest request){
         User user = findUser(loginId);
         Travel travel = new Travel(
