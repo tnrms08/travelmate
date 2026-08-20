@@ -4,6 +4,7 @@ import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import com.travelmate.entity.Travel;
 import com.travelmate.entity.User;
+import com.travelmate.enums.TravelStatus;
 import com.travelmate.exception.TravelAccessDeniedException;
 import com.travelmate.exception.TravelNotFoundException;
 import com.travelmate.exception.UserNotFoundException;
@@ -12,6 +13,7 @@ import com.travelmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,8 @@ public class TravelService {
                 travel.getDestination(),
                 travel.getStartDate(),
                 travel.getEndDate(),
-                travel.getBudget()
+                travel.getBudget(),
+                calculateStatus(travel)
         );
     }
 
@@ -52,6 +55,20 @@ public class TravelService {
         if(!travel.getUser().equals(user))
             throw new TravelAccessDeniedException();
     }
+
+    //Travel 상태값 설정
+    private TravelStatus calculateStatus(Travel travel){
+        LocalDate today = LocalDate.now();
+
+        if(today.isBefore(travel.getStartDate()))
+            return TravelStatus.PLANNED;
+
+        if(today.isAfter(travel.getEndDate()))
+            return TravelStatus.COMPLETED;
+
+        return TravelStatus.ONGOING;
+    }
+
 
     public TravelResponse getTravel(String loginId, Long id) {
         Travel travel = findTravelById(id);
@@ -106,5 +123,7 @@ public class TravelService {
         validateTravelOwner(foundTravel, user);
         travelRepository.deleteById(id);
     }
+
+
 
 }
