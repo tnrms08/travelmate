@@ -1,5 +1,6 @@
 package com.travelmate.controller;
 
+import com.travelmate.dto.TravelDetailResponse;
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
 import com.travelmate.service.TravelService;
@@ -20,6 +21,12 @@ public class TravelController {
     public TravelResponse getTravel(Authentication authentication,
                                     @PathVariable Long id){
         return travelService.getTravel(authentication.getName(), id);
+    }
+
+    @GetMapping("/travels/{id}/detail")
+    public TravelDetailResponse getTravelDetail(Authentication authentication,
+                                                @PathVariable Long id){
+        return travelService.getTravelDetail(authentication.getName(), id);
     }
 
 //    @GetMapping("/travels")

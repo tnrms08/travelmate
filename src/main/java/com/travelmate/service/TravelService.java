@@ -1,13 +1,17 @@
 package com.travelmate.service;
 
+import com.travelmate.dto.ScheduleResponse;
+import com.travelmate.dto.TravelDetailResponse;
 import com.travelmate.dto.TravelRequest;
 import com.travelmate.dto.TravelResponse;
+import com.travelmate.entity.Schedule;
 import com.travelmate.entity.Travel;
 import com.travelmate.entity.User;
 import com.travelmate.enums.TravelStatus;
 import com.travelmate.exception.TravelAccessDeniedException;
 import com.travelmate.exception.TravelNotFoundException;
 import com.travelmate.exception.UserNotFoundException;
+import com.travelmate.repository.ScheduleRepository;
 import com.travelmate.repository.TravelRepository;
 import com.travelmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import java.util.List;
 public class TravelService {
     private final TravelRepository travelRepository;
     private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
 
     //Travel to TravelResponse
     private TravelResponse toResponse(Travel travel){
@@ -33,6 +38,35 @@ public class TravelService {
                 travel.getEndDate(),
                 travel.getBudget(),
                 calculateStatus(travel)
+        );
+    }
+
+    //Travel to TravelDetailResponse
+    private TravelDetailResponse toDetailResponse(Travel travel){
+        List<Schedule> schedules = scheduleRepository.findByTravelOrderByStartTimeAsc(travel);
+        List<ScheduleResponse> foundSchedules = new ArrayList<>();
+        for(Schedule schedule: schedules){
+            foundSchedules.add(new ScheduleResponse(
+                    schedule.getId(),
+                    schedule.getTravel().getId(),
+                    schedule.getTitle(),
+                    schedule.getStartTime(),
+                    schedule.getEndTime(),
+                    schedule.getTransportation(),
+                    schedule.getPlace(),
+                    schedule.getMeal(),
+                    schedule.getAccommodation()));
+        }
+
+        return new TravelDetailResponse(
+                travel.getId(),
+                travel.getTitle(),
+                travel.getDestination(),
+                travel.getStartDate(),
+                travel.getEndDate(),
+                travel.getBudget(),
+                calculateStatus(travel),
+                foundSchedules
         );
     }
 
@@ -75,6 +109,13 @@ public class TravelService {
         User user = findUser(loginId);
         validateTravelOwner(travel, user);
         return toResponse(travel);
+    }
+
+    public TravelDetailResponse getTravelDetail(String loginId, Long id){
+        Travel travel = findTravelById(id);
+        User user = findUser(loginId);
+        validateTravelOwner(travel, user);
+        return toDetailResponse(travel);
     }
 
     public List<TravelResponse> getTravelsByUser(String loginId){
