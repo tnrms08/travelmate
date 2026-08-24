@@ -20,9 +20,33 @@ function App() {
         })
       }
     );
+
+    if (response.ok) {
+      const data = await response.json();
+      sessionStorage.setItem('token', data.token);
+      console.log("로그인 성공, token: ",sessionStorage.getItem('token'));
+      getTravels();
+    } else {
+      console.log("로그인 실패");
+    }
     console.log(response);
   };
 
+  const getTravels = async () => {
+    const token = sessionStorage.getItem('token');
+    const response = await fetch('http://localhost:8080/travels', 
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    console.log(response);
+
+    const data = await response.json();
+    console.log("여행 목록: ", data);
+  }
 
   return (
     <main className="login-page">
