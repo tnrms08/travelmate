@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function TravelListPage(){
     const [travels, setTravels] = useState([])
+    const navigate = useNavigate()
     
     const getTravels = async () => {
     const token = sessionStorage.getItem('token');
@@ -24,6 +26,11 @@ function TravelListPage(){
         getTravels()
     },[])
 
+    const handleLogout = () => {
+        sessionStorage.removeItem('token')
+        navigate("/login")
+    }
+
     return(
         <main className='travel-list'>
             <div className="travel-list">
@@ -34,6 +41,7 @@ function TravelListPage(){
                 ))}
                 </ul>
             </div>
+            <button onClick={handleLogout}>로그아웃</button>
         </main>
     )
 }
