@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import TravelListPage from './TravelListPage';
 import './App.css'
+import ProtectedRoute from './ProtectEDRoute';
 
 function App() {
 
@@ -9,7 +10,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/login' element={<LoginPage />}/>
-        <Route path='/travels' element={<TravelListPage />}/>
+        <Route path='/travels'
+               element={
+               <ProtectedRoute>
+                <TravelListPage />
+               </ProtectedRoute>
+              }/>
       </Routes>
     </BrowserRouter>
   )
