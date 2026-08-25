@@ -5,6 +5,7 @@ function TravelListPage(){
     const [travels, setTravels] = useState([])
     const navigate = useNavigate()
     
+    //여행 목록 가져오기
     const getTravels = async () => {
     const token = sessionStorage.getItem('token');
     const response = await fetch('http://localhost:8080/travels', 
@@ -26,22 +27,78 @@ function TravelListPage(){
         getTravels()
     },[])
 
+    //로그아웃
     const handleLogout = () => {
         sessionStorage.removeItem('token')
         navigate("/login")
     }
 
-    return(
-        <main className='travel-list'>
-            <div className="travel-list">
-                <h2>여행 목록</h2>
-                <ul>
-                {travels.map((travel) => (
-                    <li key={travel.id}>{travel.title}</li>
-                ))}
-                </ul>
-            </div>
-            <button onClick={handleLogout}>로그아웃</button>
+    //여행상태 텍스트 변경
+    const getStatusText = (status) =>{
+        if (status === 'PLANNED') {
+        return '계획'
+    }
+
+    if (status === 'ONGOING') {
+        return '진행'
+    }
+
+    if (status === 'COMPLETED') {
+        return '완료'
+    }
+}
+
+    return (
+        <main className='travel-page'>
+            <header className="travel-header">
+                <div>
+                    <h1>TravelMate</h1>
+                    <p>나의 여행을 관리해보세요.</p>
+                </div>
+
+                <button
+                    className="logout-button"
+                    onClick={handleLogout}
+                >
+                    로그아웃
+                </button>
+            </header>
+
+            <section className="travel-list">
+                <h2><b>나의 여행</b></h2>
+
+                <div className="travel-cards">
+                    {travels.map((travel) => (
+                        <div key={travel.id} className='travel-card'>
+
+                            <div className="travel-card-header">
+                                <div className='travel-title'>
+                                    {travel.title}
+                                </div>
+
+                                <div className={`travel-status ${travel.status.toLowerCase()}`}>
+                                    {getStatusText(travel.status)}
+                                </div>
+                            </div>
+
+                            <div className="travel-info">
+                                <div className='travel-destination'>
+                                    📍 {travel.destination}
+                                </div>
+
+                                <div className='travel-date'>
+                                    📅 {travel.startDate} ~ {travel.endDate}
+                                </div>
+
+                                <div className='travel-budget'>
+                                    💰 {travel.budget?.toLocaleString()}원
+                                </div>
+                            </div>
+
+                        </div>
+                    ))}
+                </div>
+            </section>
         </main>
     )
 }

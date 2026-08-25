@@ -106,3 +106,130 @@ input {
   cursor: pointer;
   font-weight: 600;
 }
+
+/* =========================
+   Travel List Page
+========================= */
+
+.travel-page {
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #f5f7fb;
+  box-sizing: border-box;
+}
+
+.travel-header {
+  max-width: 1000px;
+  margin: 0 auto 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.travel-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.travel-header p {
+  margin-top: 8px;
+  color: #777;
+}
+
+.logout-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background-color: #f0f0f0;
+}
+
+.travel-list {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.travel-list h2 {
+  margin-bottom: 24px;
+  font-size: 24px;
+}
+
+.travel-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.travel-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.travel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.travel-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.travel-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* 공통 상태 디자인 */
+.travel-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 여행 계획 */
+.travel-status.planned {
+  background-color: #e8f1ff;
+  color: #3b82f6;
+}
+
+/* 여행 진행 */
+.travel-status.ongoing {
+  background-color: #e8f8ee;
+  color: #22a05a;
+}
+
+/* 여행 완료 */
+.travel-status.completed {
+  background-color: #f1f3f5;
+  color: #6b7280;
+}
+
+.travel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #666;
+  font-size: 14px;
+}
+
+.travel-destination,
+.travel-date,
+.travel-budget {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
