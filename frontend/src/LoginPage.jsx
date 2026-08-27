@@ -6,6 +6,7 @@ function LoginPage(){
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
 
+    //로그인 버튼 누르기
     const handleLogin = async (event) => {
         event.preventDefault();
 

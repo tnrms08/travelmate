@@ -3,6 +3,7 @@ import LoginPage from './LoginPage';
 import TravelListPage from './TravelListPage';
 import './App.css'
 import ProtectedRoute from './ProtectEDRoute';
+import TravelCreatePage from './TravelCreatePage';
 
 function App() {
 
@@ -14,6 +15,12 @@ function App() {
                element={
                <ProtectedRoute>
                 <TravelListPage />
+               </ProtectedRoute>
+              }/>
+        <Route path='/travels/new'
+               element={
+               <ProtectedRoute>
+                <TravelCreatePage />
                </ProtectedRoute>
               }/>
       </Routes>

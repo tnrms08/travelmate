@@ -36,17 +36,22 @@ function TravelListPage(){
     //여행상태 텍스트 변경
     const getStatusText = (status) =>{
         if (status === 'PLANNED') {
-        return '계획'
+            return '계획'
+        }
+
+        if (status === 'ONGOING') {
+            return '진행'
+        }
+
+        if (status === 'COMPLETED') {
+            return '완료'
+        }
     }
 
-    if (status === 'ONGOING') {
-        return '진행'
+    //여행 추가
+    const handleAddTravel = () => {
+        navigate("/travels/new")
     }
-
-    if (status === 'COMPLETED') {
-        return '완료'
-    }
-}
 
     return (
         <main className='travel-page'>
@@ -65,7 +70,15 @@ function TravelListPage(){
             </header>
 
             <section className="travel-list">
-                <h2><b>나의 여행</b></h2>
+                <div className='travel-list-header'>
+                    <h2><b>나의 여행</b></h2>
+                    <button
+                        className='add-travel-button'
+                        onClick={handleAddTravel}
+                    >
+                        +
+                    </button>
+                </div>
 
                 <div className="travel-cards">
                     {travels.map((travel) => (
