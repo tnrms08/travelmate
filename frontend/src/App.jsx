@@ -4,6 +4,7 @@ import TravelListPage from './TravelListPage';
 import './App.css'
 import ProtectedRoute from './ProtectEDRoute';
 import TravelCreatePage from './TravelCreatePage';
+import TravelDetailPage from './TravelDetailPage';
 
 function App() {
 
@@ -23,6 +24,12 @@ function App() {
                 <TravelCreatePage />
                </ProtectedRoute>
               }/>
+        <Route path='/travels/:id'
+               element={
+               <ProtectedRoute>
+                <TravelDetailPage />
+               </ProtectedRoute>
+               }/>
       </Routes>
     </BrowserRouter>
   )

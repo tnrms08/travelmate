@@ -164,6 +164,7 @@ input {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  cursor: pointer;
 }
 
 .travel-card {
@@ -513,5 +514,271 @@ input {
 
   .date-group {
     grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   여행 상세 페이지
+========================= */
+
+.travel-detail-page {
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #f5f7fb;
+}
+
+/* 상세 페이지 상단 */
+.travel-detail-header {
+  max-width: 900px;
+  margin: 0 auto 30px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 뒤로가기 버튼 */
+.travel-detail-header button {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background-color: #ffffff;
+
+  font-size: 22px;
+  cursor: pointer;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  transition: 0.2s;
+}
+
+.travel-detail-header button:hover {
+  background-color: #eef1f6;
+  transform: translateX(-2px);
+}
+
+/* 여행 제목 */
+.travel-detail-header h1 {
+  margin: 0 0 6px;
+
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* 목적지 */
+.travel-detail-header p {
+  margin: 0;
+
+  color: #777;
+  font-size: 15px;
+}
+
+/* =========================
+   여행 기본 정보
+========================= */
+
+.travel-detail-info {
+  max-width: 900px;
+  margin: 0 auto 35px;
+
+  padding: 22px 26px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  color: #666;
+  font-size: 14px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+/* 상세 페이지 상태 */
+.travel-detail-status {
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  background-color: #e8f1ff;
+  color: #3b82f6;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   일정 영역
+========================= */
+
+.schedule-section {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.schedule-header {
+  margin-bottom: 18px;
+}
+
+.schedule-header h2 {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* 일정 하나 */
+.schedule-item {
+  margin-bottom: 12px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  transition: box-shadow 0.2s;
+}
+
+.schedule-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* 일정 요약 */
+.schedule-summary {
+  min-height: 70px;
+
+  padding: 18px 22px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  cursor: pointer;
+}
+
+/* 시간 */
+.schedule-time {
+  width: 55px;
+
+  color: #4f7cff;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 일정 제목 */
+.schedule-title {
+  flex: 1;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+
+  text-align: left;
+}
+
+/* 화살표 */
+.schedule-arrow {
+  color: #9aa3af;
+
+  font-size: 13px;
+}
+
+/* =========================
+   일정 상세 정보
+========================= */
+
+.schedule-detail {
+  padding: 18px 22px 20px;
+
+  background-color: #fafbfc;
+
+  border-top: 1px solid #edf0f4;
+
+
+  text-align: left;
+}
+
+.schedule-detail p {
+  margin: 8px 0;
+
+  color: #666;
+
+  font-size: 14px;
+}
+
+.schedule-detail p:first-child {
+  margin-top: 0;
+}
+
+.schedule-detail p:last-child {
+  margin-bottom: 0;
+}
+
+/* 일정이 없는 경우 */
+.schedule-section > p {
+  padding: 30px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  text-align: center;
+
+  color: #888;
+}
+
+/* =========================
+   모바일 대응
+========================= */
+
+@media (max-width: 768px) {
+
+  .travel-detail-page {
+    padding: 25px 20px;
+  }
+
+  .travel-detail-header {
+    margin-bottom: 24px;
+  }
+
+  .travel-detail-header h1 {
+    font-size: 23px;
+  }
+
+  .travel-detail-info {
+    padding: 18px;
+
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+  .schedule-summary {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .schedule-time {
+    width: 45px;
+  }
+
+  .schedule-title {
+    font-size: 15px;
+  }
+
+  .schedule-detail {
+    padding: 16px;
   }
 }

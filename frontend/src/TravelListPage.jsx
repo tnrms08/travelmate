@@ -10,10 +10,10 @@ function TravelListPage(){
     const token = sessionStorage.getItem('token');
     const response = await fetch('http://localhost:8080/travels', 
         {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         }
     );
     console.log(response);
@@ -53,6 +53,11 @@ function TravelListPage(){
         navigate("/travels/new")
     }
 
+    // 여행 상세 페이지로 이동
+    const handleTravelClick = (id) => {
+        navigate(`/travels/${id}`)
+    }
+
     return (
         <main className='travel-page'>
             <header className="travel-header">
@@ -82,7 +87,11 @@ function TravelListPage(){
 
                 <div className="travel-cards">
                     {travels.map((travel) => (
-                        <div key={travel.id} className='travel-card'>
+                        <div 
+                            key={travel.id} 
+                            className='travel-card'
+                            onClick={()=>handleTravelClick(travel.id)}
+                        >
 
                             <div className="travel-card-header">
                                 <div className='travel-title'>
